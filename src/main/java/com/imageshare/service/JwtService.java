@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,14 +24,21 @@ public class JwtService {
 
     private SecretKey getSigningKey() {
         String secret = jwtConfig.getSecret();
-        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes;
+        
+        // 尝试将密钥作为Base64字符串解码
+        try {
+            keyBytes = Base64.getDecoder().decode(secret);
+        } catch (IllegalArgumentException e) {
+            // 如果不是Base64格式，则作为普通字符串处理
+            keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        }
         
         // 确保密钥长度至少为256位（32字节）
         if (keyBytes.length < 32) {
             // 如果密钥太短，使用SHA-256哈希扩展它
-            java.security.MessageDigest digest;
             try {
-                digest = java.security.MessageDigest.getInstance("SHA-256");
+                java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
                 keyBytes = digest.digest(keyBytes);
             } catch (java.security.NoSuchAlgorithmException e) {
                 throw new RuntimeException("Failed to generate secure key", e);

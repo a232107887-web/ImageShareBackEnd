@@ -21,7 +21,7 @@ azure:
     container-name: ${AZURE_STORAGE_CONTAINER_NAME}
 
 jwt:
-  secret: ${JWT_SECRET:PF54Eyadn0gme3uG1KrELC95ZGfsQQt5Mz5xSTKxAJ8=}
+  secret: ${JWT_SECRET:ThisIsAVeryLongSecretKeyForJWTTokenGenerationThatIsAtLeast32CharactersLong}
   expiration: 86400000
 
 
