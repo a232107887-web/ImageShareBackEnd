@@ -22,7 +22,27 @@ public class JwtService {
     private JwtConfig jwtConfig;
 
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8));
+        String secret = jwtConfig.getSecret();
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        
+        // 确保密钥长度至少为256位（32字节）
+        if (keyBytes.length < 32) {
+            // 如果密钥太短，使用SHA-256哈希扩展它
+            java.security.MessageDigest digest;
+            try {
+                digest = java.security.MessageDigest.getInstance("SHA-256");
+                keyBytes = digest.digest(keyBytes);
+            } catch (java.security.NoSuchAlgorithmException e) {
+                throw new RuntimeException("Failed to generate secure key", e);
+            }
+        } else if (keyBytes.length > 32) {
+            // 如果密钥太长，截取前32字节
+            byte[] truncated = new byte[32];
+            System.arraycopy(keyBytes, 0, truncated, 0, 32);
+            keyBytes = truncated;
+        }
+        
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String extractUsername(String token) {
