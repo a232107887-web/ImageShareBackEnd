@@ -1,6 +1,5 @@
 package com.imageshare.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,11 +23,9 @@ public class Image {
     private String contentType;
     
     private Long fileSize;
-
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    
     private LocalDateTime uploadDate;
-
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    
     private LocalDateTime updatedAt;
 }
 

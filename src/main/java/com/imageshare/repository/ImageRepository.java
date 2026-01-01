@@ -8,8 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ImageRepository extends MongoRepository<Image, String> {
-    List<Image> findByUserIdOrderByUploadDateDesc(String userId);
-    List<Image> findAllByOrderByUploadDateDesc();
+    List<Image> findByUserId(String userId);
 }
 
 

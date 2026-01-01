@@ -43,11 +43,11 @@ public class ImageService {
     }
 
     public List<Image> getAllImages() {
-        return imageRepository.findAllByOrderByUploadDateDesc();
+        return imageRepository.findAll();
     }
 
     public List<Image> getUserImages(String userId) {
-        return imageRepository.findByUserIdOrderByUploadDateDesc(userId);
+        return imageRepository.findByUserId(userId);
     }
 
     public Image updateImageName(String imageId, String userId, String newName) {
